@@ -25,26 +25,25 @@ class TrainerView(View):
                 datos = {'message': "trainer not found..."}
             return JsonResponse(datos)
         else:
-            trainers = list(TreeModel.objects.values())
+            trainers = list(TrainerModel.objects.values())
             if len(trainers) > 0:
-                datos = {'message': "Success", 'tree': trainer}
+                datos = {'message': "Success", 'trainers': trainers}
             else:
                 datos = {'message': "trainer not found..."}
             return JsonResponse(datos)
 
     def post(self, request):
-        # print(request.body)
         jd = json.loads(request.body)
-        # print(jd)
+        print(jd)
         TrainerModel.objects.create(name=jd['name'], list_of_horses=jd['list_of_horses'])
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
         jd = json.loads(request.body)
-        trainers = list(TreeModel.objects.filter(id=id).values())
+        trainers = list(TrainerModel.objects.filter(id=id).values())
         if len(trainers) > 0:
-            trainer = TreeModel.objects.get(id=id)
+            trainer = TrainerModel.objects.get(id=id)
             trainer.name = jd['name']
             trainer.list_of_horses = jd['list_of_horses']
             trainer.save()
@@ -96,7 +95,7 @@ class TrackView(View):
         jd = json.loads(request.body)
         tracks = list(TrackModel.objects.filter(id=id).values())
         if len(tracks) > 0:
-            track = TreeModel.objects.get(id=id)
+            track = TrackModel.objects.get(id=id)
             track.address = jd['address']
             track.phone = jd['phone']
             track.description = jd['description']
@@ -149,7 +148,7 @@ class HorseView(View):
         jd = json.loads(request.body)
         horses = list(HorseModel.objects.filter(id=id).values())
         if len(horses) > 0:
-            horse = TreeModel.objects.get(id=id)
+            horse = HorseModel.objects.get(id=id)
             horse.name = jd['name']
             horse.owner = jd['owner']
             horse.save()
