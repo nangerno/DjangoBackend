@@ -1,18 +1,9 @@
 from django.db import models
 
 # Create your models here.
-class TreeModel(models.Model):
-    id = models.BigIntegerField(primary_key=True, unique=True, max_length=50)
-    currentID = models.IntegerField(max_length=10)
-    parrentID = models.IntegerField(max_length=10)
-    currentName = models.CharField(max_length=50)
-    background = models.CharField(max_length=50)
-    note = models.TextField()
-    fontSize = models.CharField(max_length=10)
-
 class TrainerModel(models.Model):
     name = models.CharField(max_length=50)
-    list_horsed = models.TextField()
+    list_horses = models.TextField()
 
 class TrackModel(models.Model):
     address = models.CharField(max_length=50)
@@ -22,13 +13,24 @@ class TrackModel(models.Model):
 
 class HorseModel(models.Model):
     name = models.CharField(max_length=50)
+    # trainer, jockey, Sire/Dam, Horse Spell(date from to), Date when trainer changed(past trainers)
+    owner = models.TextField()
 
-class RaceResult(models.Model):
+class RaceResultModel(models.Model):
     track_name = models.CharField(max_length=50)
     horse_name_position = models.CharField(max_length=50)
     odds = models.CharField(max_length=50)
-
-class TrailResult(models.Model):
+    margin = models.CharField(max_length=50)
+    race_name = models.CharField(max_length=50)
+    video_comment = models.TextField()
+    steward_comment = models.TextField()
+    barrior_horse_number = models.CharField(max_length=50)
+    last_600m_race_time = models.CharField(max_length=50)
+    race_time = models.CharField(max_length=50)
+    position_at_800m = models.CharField(max_length=50)
+    conditions = models.TextField()
+    class_of_race = models.CharField(max_length=50)
+class TrailResultModel(models.Model):
     date_trail = models.CharField(max_length=50)
     track_name = models.CharField(max_length=50)
     distance = models.CharField(max_length=50)
@@ -36,5 +38,8 @@ class TrailResult(models.Model):
     position = models.CharField(max_length=50)
     race_time = models.CharField(max_length=50)
     horse_name = models.CharField(max_length=50)
+class JockeyModel(models.Model):
+    name = models.CharField(max_length=50)
+
     
 
