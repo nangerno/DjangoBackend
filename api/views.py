@@ -3,6 +3,7 @@ from django.http.response import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.http import QueryDict
 from .models import TrainerModel, TrackModel, HorseModel, RaceResultModel, TrailResultModel, JockeyModel
 import json
 
@@ -33,19 +34,22 @@ class TrainerView(View):
             return JsonResponse(datos)
 
     def post(self, request):
-        jd = json.loads(request.body)
-        print(jd)
-        TrainerModel.objects.create(name=jd['name'], list_of_horses=jd['list_of_horses'])
+        name = request.POST.get('name')
+        list_horses = request.POST.get('list_of_horses')
+        TrainerModel.objects.create(name=name, list_horses=list_horses)
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
-        jd = json.loads(request.body)
+        put = QueryDict(request.body)
+        name = put.get("name")
+        list_horses = put.get("list_horses")
+        print(list_horses)
         trainers = list(TrainerModel.objects.filter(id=id).values())
         if len(trainers) > 0:
             trainer = TrainerModel.objects.get(id=id)
-            trainer.name = jd['name']
-            trainer.list_of_horses = jd['list_of_horses']
+            trainer.name = name
+            trainer.list_horses = list_horses
             trainer.save()
             datos = {'message': "Success"}
         else:
