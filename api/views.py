@@ -34,16 +34,13 @@ class TrainerView(View):
             return JsonResponse(datos)
 
     def post(self, request):
-        name = request.POST.get('name')
-        list_horses = request.POST.get('list_of_horses')
-        TrainerModel.objects.create(name=name, list_horses=list_horses)
+        TrainerModel.objects.create(name=request.POST.get('name'), list_horses=request.POST.get('list_horses'))
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
-        put = QueryDict(request.body)
-        name = put.get("name")
-        list_horses = put.get("list_horses")
+        name = QueryDict(request.body).get("name")
+        list_horses = QueryDict(request.body).get("list_horses")
         print(list_horses)
         trainers = list(TrainerModel.objects.filter(id=id).values())
         if len(trainers) > 0:
@@ -84,25 +81,21 @@ class TrackView(View):
             if len(tracks) > 0:
                 datos = {'message': "Success", 'tracks': tracks}
             else:
-                datos = {'message': "trainer not found..."}
+                datos = {'message': "tracks not found..."}
             return JsonResponse(datos)
 
     def post(self, request):
-        # print(request.body)
-        jd = json.loads(request.body)
-        # print(jd)
-        TrackModel.objects.create(address=jd['address'], phone=jd['phone'], description=['description'])
+        TrackModel.objects.create(address=request.POST.get('address'), phone=request.POST.get('phone'), description=request.POST.get('description'))
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
-        jd = json.loads(request.body)
         tracks = list(TrackModel.objects.filter(id=id).values())
         if len(tracks) > 0:
             track = TrackModel.objects.get(id=id)
-            track.address = jd['address']
-            track.phone = jd['phone']
-            track.description = jd['description']
+            track.address = QueryDict(request.body).get("address")
+            track.phone = QueryDict(request.body).get("phone")
+            track.description = QueryDict(request.body).get("description")
             track.save()
             datos = {'message': "Success"}
         else:
@@ -115,7 +108,7 @@ class TrackView(View):
             TrackModel.objects.filter(id=id).delete()
             datos = {'message': "Success"}
         else:
-            datos = {'message': "tracks not found..."}
+            datos = {'message': "track not found..."}
         return JsonResponse(datos)
 
 class HorseView(View):
@@ -141,20 +134,16 @@ class HorseView(View):
             return JsonResponse(datos)
 
     def post(self, request):
-        # print(request.body)
-        jd = json.loads(request.body)
-        # print(jd)
-        HorseModel.objects.create(name=jd['name'], owner=jd['owner'])
+        HorseModel.objects.create(name=request.POST.get('name'), owner=request.POST.get('owner'))
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
-        jd = json.loads(request.body)
         horses = list(HorseModel.objects.filter(id=id).values())
         if len(horses) > 0:
             horse = HorseModel.objects.get(id=id)
-            horse.name = jd['name']
-            horse.owner = jd['owner']
+            horse.name = QueryDict(request.body).get("name")
+            horse.owner = QueryDict(request.body).get("owner")
             horse.save()
             datos = {'message': "Success"}
         else:
@@ -193,31 +182,27 @@ class RaceResultView(View):
             return JsonResponse(datos)
 
     def post(self, request):
-        # print(request.body)
-        jd = json.loads(request.body)
-        # print(jd)
-        RaceResultModel.objects.create(track_name=jd['track_name'], horse_name_position=jd['horse_name_position'], odds=jd['odds'], margin=jd['margin'], race_name=jd['race_name'], video_comment=jd['video_comment'], steward_comment=jd['steward_comment'], barrior_horse_number=jd['barrior_horse_number'], last_600m_race_time=jd['last_600m_race_time'], race_time=jd['race_time'], position_at_800m=jd['position_at_800m'], conditions=jd['conditions'], class_of_race=jd['class_of_race'])
+        RaceResultModel.objects.create(track_name=request.POST.get('track_name'), horse_name_position=request.POST.get('horse_name_position'), odds=request.POST.get('odds'), margin=request.POST.get('margin'), race_name=request.POST.get('race_name'), video_comment=request.POST.get('video_comment'), steward_comment=request.POST.get('steward_comment'), barrior_horse_number=request.POST.get('barrior_horse_number'), last_600m_race_time=request.POST.get('last_600m_race_time'), race_time=request.POST.get('race_time'), position_at_800m=request.POST.get('position_at_800m'), conditions=request.POST.get('conditions'), class_of_race=request.POST.get('class_of_race'))
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
-        jd = json.loads(request.body)
         race_results = list(RaceResultModel.objects.filter(id=id).values())
         if len(race_results) > 0:
             race_result = RaceResultModel.objects.get(id=id)
-            race_result.track_name = jd['track_name']
-            race_result.horse_name_position = jd['horse_name_position']
-            race_result.odds = jd['odds']
-            race_result.margin = jd['margin']
-            race_result.race_name = jd['race_name']
-            race_result.video_comment = jd['video_comment']
-            race_result.steward_comment = jd['steward_comment']
-            race_result.barrior_horse_number = jd['barrior_horse_number']
-            race_result.last_600m_race_time = jd['last_600m_race_time']
-            race_result.race_time = jd['race_time']
-            race_result.position_at_800m = jd['position_at_800m']
-            race_result.conditions = jd['conditions']
-            race_result.class_of_race = jd['class_of_race']
+            race_result.track_name = QueryDict(request.body).get("track_name")
+            race_result.horse_name_position = QueryDict(request.body).get("horse_name_position")
+            race_result.odds = QueryDict(request.body).get("odds")
+            race_result.margin = QueryDict(request.body).get("margin")
+            race_result.race_name = QueryDict(request.body).get("race_name")
+            race_result.video_comment = QueryDict(request.body).get("video_comment")
+            race_result.steward_comment = QueryDict(request.body).get("steward_comment")
+            race_result.barrior_horse_number = QueryDict(request.body).get("barrior_horse_number")
+            race_result.last_600m_race_time = QueryDict(request.body).get("last_600m_race_time")
+            race_result.race_time = QueryDict(request.body).get("race_time")
+            race_result.position_at_800m = QueryDict(request.body).get("position_at_800m")
+            race_result.conditions = QueryDict(request.body).get("conditions")
+            race_result.class_of_race = QueryDict(request.body).get("class_of_race")
             race_result.save()
             datos = {'message': "Success"}
         else:
@@ -256,25 +241,21 @@ class TrailResultView(View):
             return JsonResponse(datos)
 
     def post(self, request):
-        # print(request.body)
-        jd = json.loads(request.body)
-        # print(jd)
-        TrailResultModel.objects.create(date_trail=jd['date_trail'], track_name=jd['track_name'], distance=jd['distance'], position=jd['position'], race_time=jd['race_time'], horse_name=jd['horse_name'])
+        TrailResultModel.objects.create(date_trail=request.POST.get('date_trail'), track_name=request.POST.get('track_name'), distance=request.POST.get('distance'), position=request.POST.get('position'), race_time=request.POST.get('race_time'), horse_name=request.POST.get('horse_name'))
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
-        jd = json.loads(request.body)
         trail_results = list(TrailResultModel.objects.filter(id=id).values())
         if len(trail_results) > 0:
             trail_result = TrailResultModel.objects.get(id=id)
-            trail_result.date_trail = jd['date_trail']
-            trail_result.track_name = jd['track_name']
-            trail_result.distance = jd['distance']
-            trail_result.conditions = jd['conditions']
-            trail_result.position = jd['position']
-            trail_result.race_time = jd['race_time']
-            trail_result.horse_name = jd['horse_name']
+            trail_result.date_trail = QueryDict(request.body).get("date_trail")
+            trail_result.track_name = QueryDict(request.body).get("track_name")
+            trail_result.distance = QueryDict(request.body).get("distance")
+            trail_result.conditions = QueryDict(request.body).get("conditions")
+            trail_result.position = QueryDict(request.body).get("position")
+            trail_result.race_time = QueryDict(request.body).get("race_time")
+            trail_result.horse_name = QueryDict(request.body).get("horse_name")
             trail_result.save()
             datos = {'message': "Success"}
         else:
@@ -313,19 +294,15 @@ class JockeyView(View):
             return JsonResponse(datos)
 
     def post(self, request):
-        # print(request.body)
-        jd = json.loads(request.body)
-        # print(jd)
-        JockeyModel.objects.create(name=jd['name'])
+        JockeyModel.objects.create(name=request.POST.get('name'))
         datos = {'message': "Success"}
         return JsonResponse(datos)
 
     def put(self, request, id):
-        jd = json.loads(request.body)
         jockeys = list(JockeyModel.objects.filter(id=id).values())
         if len(jockeys) > 0:
             jockey = TrailResultModel.objects.get(id=id)
-            jockey.name = jd['name']
+            jockey.name = QueryDict(request.body).get("name")
             jockey.save()
             datos = {'message': "Success"}
         else:
